@@ -1,4 +1,3 @@
-# TODO:  Напишите свой вариант
 from django.shortcuts import get_object_or_404
 from posts.models import Group, Post
 from rest_framework import filters, mixins, permissions, viewsets
@@ -28,12 +27,10 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Пропишем создание и сохранение нового поста"""
-
         serializer.save(author=self.request.user)
 
     def perform_update(self, serializer):
         """Пропишем обновление и сохранение поста"""
-
         serializer.save(author=self.request.user)
 
 
@@ -60,9 +57,18 @@ class CommentViewSet(viewsets.ModelViewSet):
         return post.comments.all()
 
 
-class FollowViewSet(mixins.CreateModelMixin,
-                    mixins.ListModelMixin,
-                    viewsets.GenericViewSet):
+class CreateListViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    """Создадим класс, позволящий пользователю
+    просматривать своих подписчиков и подписываться
+    на новых авторов."""
+    pass
+
+
+class FollowViewSet(CreateListViewSet):
     """Создаём вьюсет для подписок и подписчиков.
     Доступен только авторизованным пользователям."""
 
